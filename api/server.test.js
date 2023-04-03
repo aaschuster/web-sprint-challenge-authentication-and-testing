@@ -71,12 +71,28 @@ describe("[POST] /api/auth/register", () => {
     expect(await db("users")).toHaveLength(6);
   })
 
-  test('[4] responds with newly created user', async () => {
-    let res = await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
-    expect(res.body).toMatchObject({username: "george"});
+  test('[4] response has id, username and passsword', async () => {
+    let res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "george", password: "pass"});
+
+    expect(res.body.username).toBeTruthy();
+    expect(res.body.password).toBeTruthy();
+    expect(res.body.id).toBeTruthy();
   })
 
-  test('[5] new user is in db', async () => {
+  test('[5] responds with newly created user', async () => {
+    let res = await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
+    expect(res.body).toMatchObject({username: "george"});
+
+    res = await request(server).post("/api/auth/register").send({username: "matthew", password: "pass"});
+    expect(res.body).toMatchObject({username: "matthew"});
+
+    res = await request(server).post("/api/auth/register").send({username: "caleb", password: "pass"});
+    expect(res.body).toMatchObject({username: "caleb"});
+  })
+
+  test('[6] new user is in db', async () => {
     let res = await request(server)
       .post("/api/auth/register")
       .send({username: "george", password: "pass"});
