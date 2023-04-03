@@ -17,16 +17,16 @@ afterAll(async ()=> {
 
 describe("basic tests", () => {
 
-  test('sanity', () => {
+  test('[0] sanity', () => {
     expect(true).toBe(true)
   })
 
-  test("environment is testing", () => expect(process.env.NODE_ENV).toBe("testing"));
+  test("[0] environment is testing", () => expect(process.env.NODE_ENV).toBe("testing"));
 })
 
 describe("[POST] /api/auth/register", () => {
 
-  test('responds with "username and password required" if not provided', async () => {
+  test('[1] responds with "username and password required" if not provided', async () => {
     let res = await request(server).post("/api/auth/register");
     expect(res.body.message).toBe("username and password required");
 
@@ -49,7 +49,7 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body.message).toBe("username and password required");
   })
 
-  test('responds with "username taken" if username is already in db', async () => {
+  test('[2] responds with "username taken" if username is already in db', async () => {
     let res = await request(server).post("/api/auth/register").send({username: "aaron", password: "pass"});
     expect(res.body.message).toBe("username taken");
 
@@ -58,6 +58,11 @@ describe("[POST] /api/auth/register", () => {
 
     res = await request(server).post("/api/auth/register").send({username: "mia", password: "pass"});
     expect(res.body.message).toBe("username taken");
+  })
+
+  test('[3] users db is increased in length when valid user is entered', async () => {
+    await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
+    expect(await db("users")).toHaveLength(4);
   })
 
 })

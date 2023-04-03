@@ -4,9 +4,13 @@ const {
   usernameNotTaken,
   usernameExists
 } = require("../middleware/checkCreds");
+const Users = require("../users/user-model");
 
 router.post('/register', checkUserAndPass, usernameNotTaken, (req, res) => {
-  res.end('implement register, please!');
+  Users.add(req.body)
+    .then( newUser => res.status(201).json(newUser))
+    .catch(next);
+
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
