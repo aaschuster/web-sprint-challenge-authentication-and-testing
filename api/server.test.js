@@ -63,6 +63,12 @@ describe("[POST] /api/auth/register", () => {
   test('[3] users db is increased in length when valid user is entered', async () => {
     await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
     expect(await db("users")).toHaveLength(4);
+
+    await request(server).post("/api/auth/register").send({username: "billy", password: "pass"});
+    expect(await db("users")).toHaveLength(5);
+
+    await request(server).post("/api/auth/register").send({username: "paco", password: "pass"});
+    expect(await db("users")).toHaveLength(6);
   })
 
 })
