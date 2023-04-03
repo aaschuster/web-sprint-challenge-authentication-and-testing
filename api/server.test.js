@@ -76,4 +76,31 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body).toMatchObject({username: "george"});
   })
 
+  test('[5] new user is in db', async () => {
+    let res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "george", password: "pass"});
+
+    let id = res.body.id;
+
+    expect(res.body).toMatchObject(await db("users").where({id}).first());
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "billy", password: "pass"});
+
+    id = res.body.id;
+
+    expect(res.body).toMatchObject(await db("users").where({id}).first());
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "matthew", password: "pass"});
+
+    id = res.body.id;
+
+    expect(res.body).toMatchObject(await db("users").where({id}).first());
+
+  })
+
 })
