@@ -1,6 +1,11 @@
 const router = require('express').Router();
+const {
+  checkUserAndPass,
+  usernameNotTaken,
+  usernameExists
+} = require("../middleware/checkCreds");
 
-router.post('/register', (req, res) => {
+router.post('/register', checkUserAndPass, usernameNotTaken, (req, res) => {
   res.end('implement register, please!');
   /*
     IMPLEMENT
@@ -29,7 +34,7 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', checkUserAndPass, usernameExists, (req, res) => {
   res.end('implement login, please!');
   /*
     IMPLEMENT
