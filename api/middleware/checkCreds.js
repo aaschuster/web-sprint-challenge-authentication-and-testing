@@ -1,3 +1,4 @@
+const Users = require("../users/user-model");
 
 function checkUserAndPass(req, res, next) {
     if(req.body.username && req.body.password) {
@@ -12,7 +13,15 @@ function checkUserAndPass(req, res, next) {
 }
 
 function usernameNotTaken(req, res, next) {
-    next();
+    Users.getBy({username: req.body.username})
+        .then( user => {
+            if(user) return next({
+                status: 422,
+                message: "username taken"
+            })
+            next();
+        })
+        .catch(next);
 }
 
 function usernameExists(req, res, next) {
