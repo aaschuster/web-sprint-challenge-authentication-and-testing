@@ -71,4 +71,9 @@ describe("[POST] /api/auth/register", () => {
     expect(await db("users")).toHaveLength(6);
   })
 
+  test('[4] responds with newly created user', async () => {
+    let res = await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
+    expect(res.body).toMatchObject({username: "george"});
+  })
+
 })

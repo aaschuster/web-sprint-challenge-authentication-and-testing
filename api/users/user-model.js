@@ -1,10 +1,8 @@
 db = require("../../data/dbConfig");
 
 async function add(user) {
-    db("users").insert(user)
-        .then( ([newUserID]) => {
-            return getBy({id: newUserID});
-        });
+    return db("users").insert(user)
+        .then( async ([newUserID]) =>  getBy({id: newUserID}) )
 }
 
 function getBy(filter) {

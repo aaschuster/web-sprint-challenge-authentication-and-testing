@@ -6,7 +6,7 @@ const {
 } = require("../middleware/checkCreds");
 const Users = require("../users/user-model");
 
-router.post('/register', checkUserAndPass, usernameNotTaken, (req, res) => {
+router.post('/register', checkUserAndPass, usernameNotTaken, (req, res, next) => {
   Users.add(req.body)
     .then( newUser => res.status(201).json(newUser))
     .catch(next);
