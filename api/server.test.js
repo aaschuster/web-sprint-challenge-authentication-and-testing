@@ -21,8 +21,28 @@ describe("basic tests", () => {
 })
 
 describe("[POST] /api/auth/register", () => {
+
   test('responds with "username and password required" if not provided', async () => {
-    const res = await request(server).post("/api/auth/register");
+    let res = await request(server).post("/api/auth/register");
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({username: "", password: "pass"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({username: "     ", password: "pass"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({username: "user", password: ""})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({username: "", password: ""})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({username: "user"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/register").send({password: "pass"})
     expect(res.body.message).toBe("username and password required");
   })
+
 })

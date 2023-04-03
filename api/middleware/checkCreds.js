@@ -2,8 +2,8 @@
 function checkUserAndPass(req, res, next) {
     if(req.body.username && req.body.password) {
         req.body.username = req.body.username.trim();
+        if(req.body.username) return next();
     }
-    if(req.body.username) return next();
 
     next({
         status: 422,
