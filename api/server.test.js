@@ -97,6 +97,26 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body.id).toBeTruthy();
   })
 
+  test('[5] response password does not equal password send (response password is encrypted)', async () => {
+    let res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "george", password: "pass"});
+
+    expect(res.body.password).not.toBe("pass");
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "juan", password: "1234"});
+
+    expect(res.body.password).not.toBe("1234");
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "matthew", password: "matthew"});
+
+    expect(res.body.password).not.toBe("matthew");
+  })
+
   test('[5] responds with newly created user', async () => {
     let res = await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
     expect(res.body).toMatchObject({username: "george"});
