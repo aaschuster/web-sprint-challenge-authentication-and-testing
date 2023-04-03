@@ -52,6 +52,12 @@ describe("[POST] /api/auth/register", () => {
   test('responds with "username taken" if username is already in db', async () => {
     let res = await request(server).post("/api/auth/register").send({username: "aaron", password: "pass"});
     expect(res.body.message).toBe("username taken");
+
+    res = await request(server).post("/api/auth/register").send({username: "tori", password: "pass"});
+    expect(res.body.message).toBe("username taken");
+
+    res = await request(server).post("/api/auth/register").send({username: "mia", password: "pass"});
+    expect(res.body.message).toBe("username taken");
   })
 
 })
