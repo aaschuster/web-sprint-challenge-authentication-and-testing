@@ -79,6 +79,22 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body.username).toBeTruthy();
     expect(res.body.password).toBeTruthy();
     expect(res.body.id).toBeTruthy();
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "juan", password: "pass"});
+
+    expect(res.body.username).toBeTruthy();
+    expect(res.body.password).toBeTruthy();
+    expect(res.body.id).toBeTruthy();
+
+    res = await request(server)
+      .post("/api/auth/register")
+      .send({username: "paco", password: "pass"});
+
+    expect(res.body.username).toBeTruthy();
+    expect(res.body.password).toBeTruthy();
+    expect(res.body.id).toBeTruthy();
   })
 
   test('[5] responds with newly created user', async () => {
