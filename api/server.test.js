@@ -7,6 +7,10 @@ beforeAll(async () => {
   await db.migrate.latest();
 })
 
+beforeEach(async () => {
+  await db.seed.run();
+})
+
 afterAll(async ()=> {
   await db.destroy();
 })
@@ -43,6 +47,11 @@ describe("[POST] /api/auth/register", () => {
 
     res = await request(server).post("/api/auth/register").send({password: "pass"})
     expect(res.body.message).toBe("username and password required");
+  })
+
+  test('responds with "username taken" if username is already in db', async () => {
+    let res = await request(server).post("/api/auth/register").send({username: "aaron", password: "pass"});
+    expect(res.body.message).toBe("username taken");
   })
 
 })
