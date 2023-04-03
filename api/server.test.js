@@ -117,7 +117,7 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body.password).not.toBe("matthew");
   })
 
-  test('[5] responds with newly created user', async () => {
+  test('[6] responds with newly created user', async () => {
     let res = await request(server).post("/api/auth/register").send({username: "george", password: "pass"});
     expect(res.body).toMatchObject({username: "george"});
 
@@ -128,7 +128,7 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body).toMatchObject({username: "caleb"});
   })
 
-  test('[6] new user is in db', async () => {
+  test('[7] new user is in db', async () => {
     let res = await request(server)
       .post("/api/auth/register")
       .send({username: "george", password: "pass"});
@@ -155,4 +155,34 @@ describe("[POST] /api/auth/register", () => {
 
   })
 
+})
+
+describe("[POST] /api/auth/login", () => {
+  test('[1] responds with "username and password required" if not provided', async () => {
+    let res = await request(server).post("/api/auth/login");
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({username: "", password: "pass"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({username: "     ", password: "pass"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({username: "user", password: ""})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({username: "", password: ""})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({username: "user"})
+    expect(res.body.message).toBe("username and password required");
+
+    res = await request(server).post("/api/auth/login").send({password: "pass"})
+    expect(res.body.message).toBe("username and password required");
+  })
+
+  test('[2] responds with "invalid credentials" if username is not in db', async () => {
+    let res = await request(server).post("/api/auth/login").send({username: "george", password: "pass"});
+    expect(res.body.message).toBe("invalid credentials");
+  })
 })
