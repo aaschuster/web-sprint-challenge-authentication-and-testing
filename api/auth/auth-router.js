@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const router = require('express').Router();
+
+const { JWT_SECRET } = require("../secrets");
 const {
   checkUserAndPass,
   usernameNotTaken,
@@ -42,6 +45,19 @@ router.post('/register', checkUserAndPass, usernameNotTaken, (req, res, next) =>
       the response body should include a string exactly as follows: "username taken".
   */
 });
+
+function buildToken(user) {
+  return jwt.sign(
+    {
+      subject: user.id,
+      username: user.username
+    },
+    JWT_SECRET,
+    {
+      expiresIn: "1d"
+    }
+  )
+}
 
 router.post('/login', checkUserAndPass, usernameExists, (req, res, next) => {
   let { username, password } = req.body;
