@@ -158,7 +158,7 @@ describe("[POST] /api/auth/register", () => {
 })
 
 describe("[POST] /api/auth/login", () => {
-  test('[1] responds with "username and password required" if not provided', async () => {
+  test('[8] responds with "username and password required" if not provided', async () => {
     let res = await request(server).post("/api/auth/login");
     expect(res.body.message).toBe("username and password required");
 
@@ -181,8 +181,23 @@ describe("[POST] /api/auth/login", () => {
     expect(res.body.message).toBe("username and password required");
   })
 
-  test('[2] responds with "invalid credentials" if username is not in db', async () => {
-    let res = await request(server).post("/api/auth/login").send({username: "george", password: "pass"});
+  test('[9] responds with "invalid credentials" if username is not in db', async () => {
+    let res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "george", password: "pass"});
+
+    expect(res.body.message).toBe("invalid credentials");
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "juan", password: "pass"});
+
+    expect(res.body.message).toBe("invalid credentials");
+    
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "joshua", password: "pass"});
+
     expect(res.body.message).toBe("invalid credentials");
   })
 })
