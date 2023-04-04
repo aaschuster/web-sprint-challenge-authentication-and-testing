@@ -200,4 +200,24 @@ describe("[POST] /api/auth/login", () => {
 
     expect(res.body.message).toBe("invalid credentials");
   })
+
+  test(`[10] responds with "invalid credentials" if password doesn't match`, async () => {
+    let res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "aaron", password: "1234"})
+
+    expect(res.body.message).toBe("invalid credentials");
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "aaron", password: "aaron"})
+
+    expect(res.body.message).toBe("invalid credentials");
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "aaron", password: "password"})
+
+    expect(res.body.message).toBe("invalid credentials");
+  })
 })
