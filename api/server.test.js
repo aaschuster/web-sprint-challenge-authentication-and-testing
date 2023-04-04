@@ -226,7 +226,7 @@ describe("[POST] /api/auth/login", () => {
       .post("/api/auth/login")
       .send({username: "aaron", password: "pass"});
 
-      expect(res.body.message).toBe("welcome, aaron");
+    expect(res.body.message).toBe("welcome, aaron");
 
     res = await request(server)
     .post("/api/auth/login")
@@ -238,6 +238,26 @@ describe("[POST] /api/auth/login", () => {
       .post("/api/auth/login")
       .send({username: "tori", password: "pass"});
 
-      expect(res.body.message).toBe("welcome, tori");
+    expect(res.body.message).toBe("welcome, tori");
+  })
+
+  test('[12] response has token if credentials are valid', async () => {
+    let res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "aaron", password: "pass"});
+
+    expect(res.body.token).toBeTruthy();
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "mia", password: "pass"});
+
+    expect(res.body.token).toBeTruthy();
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "tori", password: "pass"});
+
+    expect(res.body.token).toBeTruthy();
   })
 })
