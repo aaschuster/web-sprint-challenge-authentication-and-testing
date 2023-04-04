@@ -25,7 +25,14 @@ function usernameNotTaken(req, res, next) {
 }
 
 function usernameExists(req, res, next) {
-    next();
+    Users.getBy({username: req.body.username})
+        .then( user => {
+            if(user) return next();
+            return next({
+                status: 401,
+                message: "invalid credentials"
+            });
+        })
 }
 
 module.exports = {
