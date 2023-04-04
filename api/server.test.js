@@ -227,5 +227,17 @@ describe("[POST] /api/auth/login", () => {
       .send({username: "aaron", password: "pass"});
 
       expect(res.body.message).toBe("welcome, aaron");
+
+    res = await request(server)
+    .post("/api/auth/login")
+    .send({username: "mia", password: "pass"});
+
+    expect(res.body.message).toBe("welcome, mia");
+
+    res = await request(server)
+      .post("/api/auth/login")
+      .send({username: "tori", password: "pass"});
+
+      expect(res.body.message).toBe("welcome, tori");
   })
 })
