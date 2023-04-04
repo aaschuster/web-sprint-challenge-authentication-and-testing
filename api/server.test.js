@@ -261,3 +261,26 @@ describe("[POST] /api/auth/login", () => {
     expect(res.body.token).toBeTruthy();
   })
 })
+
+describe("[GET] /api/jokes", () => {
+  test('[13] responds with jokes on valid token', async () => {
+    let loginRes = await request(server)
+      .post("/api/auth/login")
+      .send({username: "aaron", password: "pass"});
+
+    let token = loginRes.body.token;
+    
+    let jokesRes = await request(server)
+      .get("/api/jokes")
+      .set("Authorization", token)
+
+    console.log(jokesRes.body);
+
+    expect(jokesRes.body).toHaveLength(3);
+  })
+  // test('[13] responds with "token invalid" on invalid token', async () => {
+  //   let res = await request(server)
+  //     .post("/api/jokes")
+  //     .set({ Authorization: token });
+  // })
+})
