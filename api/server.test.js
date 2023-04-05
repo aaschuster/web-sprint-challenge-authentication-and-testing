@@ -265,24 +265,17 @@ describe("[POST] /api/auth/login", () => {
 describe("[GET] /api/jokes", () => {
 
   async function getToken() {
-
     const res = await request(server)
       .post("/api/auth/login")
       .send({username: "aaron", password: "pass"});
 
-    console.log(res.body.token);
-
     return res.body.token;
-
   }
 
   test('[13] responds with jokes on valid token', async () => {
-
     let jokesRes = await request(server)
       .get("/api/jokes")
       .set("Authorization", await getToken())
-
-    console.log(jokesRes.body);
 
     expect(jokesRes.body).toHaveLength(3);
   })
@@ -290,6 +283,8 @@ describe("[GET] /api/jokes", () => {
   test('[14] responds with "token invalid" on invalid token', async () => {
     let res = await request(server)
       .post("/api/jokes")
-      .set({ Authorization: token });
+      .set("Authorization", "definitely a legit token");
+
+    expect(res.body.message).toBe("token invalid");
   })
 })
