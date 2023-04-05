@@ -263,24 +263,33 @@ describe("[POST] /api/auth/login", () => {
 })
 
 describe("[GET] /api/jokes", () => {
-  test('[13] responds with jokes on valid token', async () => {
-    let loginRes = await request(server)
+
+  async function getToken() {
+
+    const res = await request(server)
       .post("/api/auth/login")
       .send({username: "aaron", password: "pass"});
 
-    let token = loginRes.body.token;
-    
+    console.log(res.body.token);
+
+    return res.body.token;
+
+  }
+
+  test('[13] responds with jokes on valid token', async () => {
+
     let jokesRes = await request(server)
       .get("/api/jokes")
-      .set("Authorization", token)
+      .set("Authorization", await getToken())
 
     console.log(jokesRes.body);
 
     expect(jokesRes.body).toHaveLength(3);
   })
-  // test('[13] responds with "token invalid" on invalid token', async () => {
-  //   let res = await request(server)
-  //     .post("/api/jokes")
-  //     .set({ Authorization: token });
-  // })
+
+  test('[14] responds with "token invalid" on invalid token', async () => {
+    let res = await request(server)
+      .post("/api/jokes")
+      .set({ Authorization: token });
+  })
 })
