@@ -287,4 +287,11 @@ describe("[GET] /api/jokes", () => {
 
     expect(res.body.message).toBe("token invalid");
   })
+
+  test('[15] responds with "token required" on missing token', async() => {
+    let res = await request(server)
+      .post("/api/jokes");
+
+    expect(res.body.message).toBe("token required");
+  })
 })
